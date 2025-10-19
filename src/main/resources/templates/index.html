@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Home Page</title>
+    <style>
+        body { font-family: Arial; display: flex; justify-content: center; margin-top: 50px; }
+        .form { border: 1px solid #ccc; padding: 20px; border-radius: 10px; width: 400px; }
+        input, textarea { width: 100%; margin: 5px 0px; padding: 5px; border-radius: 3px; }
+        table { width: 100%; }
+        td { vertical-align: top; }
+        textarea { height: 100px; }
+        button { margin-left: 20px; width: 70px; height: 27px;}
+        .error { color: red; font-size: 12px; }
+        .count { font-style: italic; font-size: 12px; margin: 5px 0px; color: blue;}
+    </style>
+</head>
+<body>
+    <div class="form">
+        <form th:action="@{/submit}" method="post" th:object="${current}">
+            <h2>Customer Form</h2>
+            <input type="hidden" th:field="*{id}">
+            <table>
+                <tr>
+                    <td>Name</td>
+                    <td><input type="text" th:field="*{name}"></td>
+                    <td><button type="sumbit" name="action" value="add">ADD</button></td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td><input type="text" th:field="*{email}"></td>
+                    <td><button type="submit" name="action" value="edit">EDIT</button></td>
+                </tr>
+                <tr>
+                    <td>Phone</td>
+                    <td><input type="text" th:field="*{phone}"></td>
+                    <td><button type="submit" name="action" value="fetch">FETCH</button></td>
+                </tr>
+                <tr>
+                    <td>Address</td>
+                    <td><textarea th:field="*{address}"></textarea></td>
+                    <td><button type="submit" name="action" value="delete">DELETE</button></td>
+                </tr>
+            </table>
+            <div class="bottom">
+                <button type="submit" name="action" value="first">FIRST</button>
+                <button type="submit" name="action" value="previous">PREVIOUS</button>
+                <button type="submit" name="action" value="next">NEXT</button>
+                <button type="submit" name="action" value="last">LAST</button>
+            </div>
+        </form>
+        <div class="count">No. of customers = <span th:text="${number}"></span>. Current customer id is <span th:text="${current.getId()}">.</span></div>
+        <div class="error" th:text="${message}"></div>
+    </div>
+</body>
+</html>
