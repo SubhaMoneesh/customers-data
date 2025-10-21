@@ -118,7 +118,10 @@ public class CustomerController {
                 currentIdx = currentIdx + 1;
                 break;
             case "last":
-                currentIdx = currentIdx - 1;
+                if (fetchOn)
+                    currentIdx = fetchedList.size() - 1;
+                else
+                    currentIdx = customerList.size() - 1;
                 break;
         }
         return "redirect:/home";
