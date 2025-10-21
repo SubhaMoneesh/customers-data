@@ -20,6 +20,7 @@ public class CustomerController {
     private boolean fetchOn = false;
     private String message = null;
     private int number;
+    private boolean clearOn = false;
 
     private final CustomerService customerService;
     private List<Customer> customerList;
@@ -33,7 +34,11 @@ public class CustomerController {
     public ModelAndView home() {
         ModelAndView view = new ModelAndView("index");
         Customer current;
-        if (!fetchOn) {
+        if (clearOn) {
+            current = new Customer();
+            clearOn = false;
+        }
+        else if (!fetchOn) {
             number = customerList.size();
             if(customerList.isEmpty())
                 current = new Customer();
@@ -60,7 +65,7 @@ public class CustomerController {
         return view;
     }
 
-    @PostMapping("/submit")
+    @PostMapping("/clicked")
     public String action(Customer customer, @RequestParam String action) {
         if (!fetchOn)
             message = null;
@@ -75,7 +80,8 @@ public class CustomerController {
                 break;
             case "edit":
                 Customer updatedCustomer = customerService.save(customer);
-                customerList = customerService.findAll();
+                //customerList = customerService.findAll();
+                updateLocalList(customerList, updatedCustomer);
                 if (fetchOn)
                     updateLocalList(fetchedList, updatedCustomer);
                 break;
@@ -99,7 +105,7 @@ public class CustomerController {
                 currentIdx = 0;
                 break;
             case "delete":
-                if (customerService.existsById(Long.valueOf(customer.getId()))) {
+                if (customer.getId() != null && customerService.existsById(Long.valueOf(customer.getId()))) {
                     customerService.delete(customer);
                     customerList = customerService.findAll();
                     fetchedList.removeIf(c -> c.getId() == customer.getId());
@@ -123,6 +129,9 @@ public class CustomerController {
                 else
                     currentIdx = customerList.size() - 1;
                 break;
+            case "clear":
+                clearOn = true;
+                break;
         }
         return "redirect:/home";
     }
@@ -130,10 +139,9 @@ public class CustomerController {
     private void updateLocalList(List<Customer> list, Customer updatedCustomer) {
         if (list != null) {
             for (int i = 0; i < list.size(); i++) {
-                // Compare IDs to find the customer to replace
                 if (list.get(i).getId() != null && list.get(i).getId().equals(updatedCustomer.getId())) {
-                    list.set(i, updatedCustomer); // Replace the old object with the updated one
-                    return; // Customer found and updated
+                    list.set(i, updatedCustomer);
+                    return;
                 }
             }
         }

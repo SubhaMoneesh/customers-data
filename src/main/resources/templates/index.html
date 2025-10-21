@@ -17,7 +17,7 @@
 </head>
 <body>
     <div class="form">
-        <form th:action="@{/submit}" method="post" th:object="${current}">
+        <form th:action="@{/clicked}" method="post" th:object="${current}">
             <h2>Customer Form</h2>
             <input type="hidden" th:field="*{id}">
             <table>
@@ -39,7 +39,7 @@
                 <tr>
                     <td>Address</td>
                     <td><textarea th:field="*{address}"></textarea></td>
-                    <td><button type="submit" name="action" value="delete">DELETE</button></td>
+                    <td style="display: flex;"><button type="submit" name="action" value="delete">DELETE</button><button type="submit" name="action" value="clear">CLEAR</button> </td>
                 </tr>
             </table>
             <div class="bottom">
